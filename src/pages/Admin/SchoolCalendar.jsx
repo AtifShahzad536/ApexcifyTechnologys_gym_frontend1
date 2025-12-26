@@ -14,7 +14,7 @@ const SchoolCalendar = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
-    const [type, setType] = useState('Event');
+    const [type, setType] = useState('Other');
     const [isOnlineEvent, setIsOnlineEvent] = useState(false);
     const [meetingLink, setMeetingLink] = useState('');
     const [loading, setLoading] = useState(false);
@@ -111,12 +111,14 @@ const SchoolCalendar = () => {
             setTitle('');
             setDescription('');
             setDate('');
-            setType('Event');
+            setType('Other');
             setIsOnlineEvent(false);
             setMeetingLink('');
             fetchEvents();
         } catch (error) {
-            console.error(error);
+            console.error('Event creation error:', error.response?.data || error.message);
+            const errorMessage = error.response?.data?.message || 'Failed to add event';
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -259,6 +261,7 @@ const SchoolCalendar = () => {
                                         onChange={(e) => setDescription(e.target.value)}
                                         className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
                                         rows="2"
+                                        required
                                     />
                                 </div>
                                 <div className="flex items-center">
@@ -274,13 +277,14 @@ const SchoolCalendar = () => {
                                 </div>
                                 {isOnlineEvent && (
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Meeting Link</label>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Meeting Link *</label>
                                         <input
                                             type="text"
                                             value={meetingLink}
                                             onChange={(e) => setMeetingLink(e.target.value)}
                                             placeholder="https://zoom.us/j/..."
                                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none"
+                                            required
                                         />
                                     </div>
                                 )}
@@ -323,6 +327,17 @@ const SchoolCalendar = () => {
                                                     <h3 className="font-bold text-gray-800">{event.title}</h3>
                                                     <p className="text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full inline-block mb-1">{event.type}</p>
                                                     <p className="text-sm text-gray-600">{event.description}</p>
+                                                    {event.isOnline && event.meetingLink && (
+                                                        <a
+                                                            href={event.meetingLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 mt-1"
+                                                        >
+                                                            <FaVideo className="mr-1" />
+                                                            Join Meeting
+                                                        </a>
+                                                    )}
                                                 </div>
                                             </div>
                                             <button

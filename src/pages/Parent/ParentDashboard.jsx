@@ -69,6 +69,7 @@ const ParentDashboard = () => {
                 e.isOnline &&
                 new Date(e.date) >= new Date(new Date().setHours(0, 0, 0, 0))
             );
+            console.log('Filtered meetings for parents:', upcomingMeetings);
             setMeetings(upcomingMeetings);
 
             // 3. Fetch Stats for Children
@@ -268,15 +269,25 @@ const ParentDashboard = () => {
                                         {new Date(meeting.date).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <a
-                                    href={meeting.meetingLink || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center shadow-lg shadow-blue-500/30"
-                                >
-                                    <FaVideo className="mr-2" />
-                                    Join Meeting
-                                </a>
+                                {meeting.meetingLink ? (
+                                    <a
+                                        href={meeting.meetingLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center shadow-lg shadow-blue-500/30"
+                                    >
+                                        <FaVideo className="mr-2" />
+                                        Join Meeting
+                                    </a>
+                                ) : (
+                                    <button
+                                        disabled
+                                        className="px-4 py-2 bg-gray-300 text-gray-500 font-bold rounded-lg cursor-not-allowed text-sm flex items-center"
+                                    >
+                                        <FaVideo className="mr-2" />
+                                        No Link Available
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>

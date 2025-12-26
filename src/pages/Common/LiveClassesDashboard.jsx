@@ -29,6 +29,8 @@ const LiveClassesDashboard = () => {
             const onlineMeetings = eventsRes.data.filter(
                 e => e.type === 'Meeting' && e.isOnline && new Date(e.date) >= new Date(new Date().setHours(0, 0, 0, 0))
             );
+            console.log('LiveClassesDashboard - All events:', eventsRes.data);
+            console.log('LiveClassesDashboard - Filtered meetings:', onlineMeetings);
             setMeetings(onlineMeetings);
 
             // 2. Fetch Role-Specific Data
@@ -220,22 +222,22 @@ const LiveClassesDashboard = () => {
                                             <p className="text-sm text-gray-600 mt-1 mb-4 line-clamp-2">{meeting.description}</p>
 
                                             <div className="space-y-2">
-                                                <button
-                                                    onClick={() => navigate(`/live-class/Meeting-${meeting._id}`)}
-                                                    className="w-full py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center"
-                                                >
-                                                    <FaVideo className="mr-2" /> Join Meeting Room
-                                                </button>
-
-                                                {meeting.meetingLink && (
+                                                {meeting.meetingLink ? (
                                                     <a
                                                         href={meeting.meetingLink}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="w-full py-2 bg-white border border-purple-200 text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-colors flex items-center justify-center text-sm"
+                                                        className="w-full py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center"
                                                     >
-                                                        <FaExternalLinkAlt className="mr-2" /> External Link
+                                                        <FaVideo className="mr-2" /> Join External Meeting
                                                     </a>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => navigate(`/live-class/Meeting-${meeting._id}`)}
+                                                        className="w-full py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center"
+                                                    >
+                                                        <FaVideo className="mr-2" /> Join Meeting Room
+                                                    </button>
                                                 )}
                                             </div>
                                         </motion.div>

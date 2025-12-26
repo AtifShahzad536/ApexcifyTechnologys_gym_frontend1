@@ -67,6 +67,13 @@ const Subjects = () => {
         setLoading(true);
 
         try {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`
+                },
+            };
             await axios.post(`${import.meta.env.VITE_API_URL}/subjects`, {
                 name,
                 code: code.toUpperCase(),
@@ -74,7 +81,7 @@ const Subjects = () => {
                 teacher: selectedTeacher,
                 credits,
                 description
-            });
+            }, config);
 
             setLoading(false);
             toast.success('Subject added successfully');
